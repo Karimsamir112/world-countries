@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>RestCountriesAPi</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!--jQuery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+  <app-root></app-root>
+
+  <script>
+    $(function() {
+    // filter country search  of continents with keyup
+    $(".search").on("keyup focus", function(){
+       $(".all-countries .components div").hide();
+
+      switch ($(".continents").val()) {
+       case "africa":
+       $(".all-countries .components div:contains('" + $(".search").val() +  "')").filter(":contains('Africa')").fadeIn();
+         break;
+       case "europe":
+       $(".all-countries .components div:contains('" + $(".search").val() +  "')").filter(":contains('Europe')").fadeIn();
+       break;
+       case "americas":
+       $(".all-countries .components div:contains('" + $(".search").val() +  "')").filter(":contains('Americas')").fadeIn();
+       break;
+       case "asia":
+       $(".all-countries .components div:contains('" + $(".search").val() +  "')").filter(":contains('Asia')").fadeIn();
+       break;
+       case "oceina":
+       $(".all-countries .components div:contains('" + $(".search").val() +  "')").filter(":contains('Oceina')").fadeIn();
+       break;
+       case "antartacia":
+       $(".all-countries .components div:contains('" + $(".search").val() +  "')").filter(":contains('Antartacia')").fadeIn();
+       break;
+       case "all":
+       $(".all-countries .components div:contains('" + $(".search").val() +  "')").fadeIn();
+       //$(".all-countries .components div").includes($(".search").val()).fadeIn();
+       break;
+      
+     } // switch
+
+      // filter continents autocomplete
+    
+    }) // keyup
+   
+    $(".continents").on("change", function(){
+      $(".search").val('');
+     switch ($(this).val()) {
+       case "africa":
+       $(".all-countries .components div").hide();
+       $(".all-countries .components div:contains('Africa')").fadeIn();
+         break;
+       case "europe":
+       $(".all-countries .components div").hide();
+       $(".all-countries .components div:contains('Europe')").fadeIn();
+       break;
+       case "americas":
+       $(".all-countries .components div").hide();
+       $(".all-countries .components div:contains('Americas')").fadeIn();
+       break;
+       case "asia":
+       $(".all-countries .components div").hide();
+       $(".all-countries .components div:contains('Asia')").fadeIn(); 
+       break;
+       case "oceina":
+       $(".all-countries .components div").hide();
+       $(".all-countries .components div:contains('Oceina')").fadeIn();
+       break;
+       case "antartacia":
+       $(".all-countries .components div").hide();
+       $(".all-countries .components div:contains('Antartacia')").fadeIn();
+       break;
+       case "all":
+       $(".all-countries .components div").fadeIn();
+       break;
+      
+     } // switch
+
+    }) // change
+
+    
+
+    // click on any image 
+    var showclickedImage = `<section class="in-clicked-image"> 
+       <div> <i class="fas fa-times close-clicked-image"></i> <img src="" alt=""/> </div>
+
+
+       <div>
+
+        <article>
+       <h2 class="country-name"></h2>
+
+       <h4 class="population"></h4>
+       <h4 class="region"></h4>
+       <h4 class="sub-region"></h4>
+       <h4 class="capital"></h4>
+       
+       <div class="borders">
+       <h3>Borders </h3>
+       <span></span>
+       <span></span>
+       <span></span>
+       <span></span>
+       <span></span>
+       </div>
+       </article>
+       <article>
+        <h4 class="top-level-domain"></h4>
+        <h4 class="currencies"></h4>
+        <h4 class="languages"></h4>
+        </article>
+       </div>
+    </section> `
+
+    // arrays all countries
+    // egypt
+    const egypt = {
+      name:'egypt',
+      population:'91,290,000',
+      region:'Africa',
+      subRegion:'Northern Africa',
+      capital:'Cairo',
+      levelDomain:'.eg',
+      currencies:'Egyptian pound',
+      languages:'Arabic'
+    }
+    // germany
+    const germany = {
+      name:'Germany',
+      population:'81,770,900',
+      region:'Europe',
+      subRegion:'Western Europe',
+      capital:'Berlin',
+      levelDomain:'.de',
+      currencies:'Euro',
+      languages:'German'
+    }
+    // france
+    const france = {
+      name:'France',
+      population:'66,710,000',
+      region:'Europe',
+      subRegion:'Western Europe',
+      capital:'Paris',
+      levelDomain:'.fr',
+      currencies:'Euro',
+      languages:'French'
+    }
+    // libya
+    const libya = {
+      name:'Libya',
+      population:'6,385,000',
+      region:'Africa',
+      subRegion:'Northern Africa',
+      capital:'Tripoli',
+      levelDomain:'.ly',
+      currencies:'Libyan dinar',
+      languages:'Arabic'
+    }
+     // spain
+     const spain = {
+      name:'Spain',
+      population:'46,438,422',
+      region:'Europe',
+      subRegion:'Southern Europe',
+      capital:'Madrid',
+      levelDomain:'.es',
+      currencies:'Euro',
+      languages:'Spanish'
+    }
+
+    // italy
+    const italy = {
+      name:'Italy',
+      population:'60,665,551',
+      region:'Europe',
+      subRegion:'Southern Europe',
+      capital:'Rome',
+      levelDomain:'.it',
+      currencies:'Euro',
+      languages:'Italian'
+    }
+
+    // nigeria
+    const nigeria = {
+      name:'Nigeria',
+      population:'186,988,000',
+      region:'Africa',
+      subRegion:'Western Africa',
+      capital:'Abuja',
+      levelDomain:'.ng',
+      currencies:'Nigerian naira',
+      languages:'English'
+    }
+    // argentina
+    const argentina = {
+      name:'Argentina',
+      population:'43,590,400',
+      region:'Americas',
+      subRegion:'South America',
+      capital:'Buenos Aires',
+      levelDomain:'.ar',
+      currencies:'Argentine peso',
+      languages:'Spanish, Guaraní'
+    }
+    // canada
+    const canada = {
+      name:'Canada',
+      population:'36,155,487',
+      region:'Americas',
+      subRegion:'Northern America',
+      capital:'Ottawa',
+      levelDomain:'.ca',
+      currencies:'Canadian dollar',
+      languages:'English, French'
+    }
+
+     // japan
+     const japan = {
+      name:'Japan',
+      population:'126,960,000',
+      region:'Asia',
+      subRegion:'Eastern Asia',
+      capital:'Tokyo',
+      levelDomain:'.jp',
+      currencies:'Japanese yen',
+      languages:' Japanese'
+    }
+    // belgium
+    const belgium = {
+      name:'Belgium',
+      population:'11,319,511',
+      region:'Europe',
+      subRegion:'Western Europe',
+      capital:'Brussels',
+      levelDomain:'.be',
+      currencies:'Euro',
+      languages:' Dutch, French, German'
+    }
+
+     // gabon
+     const gabon = {
+      name:'Gabon',
+      population:'1,802,278',
+      region:'Africa',
+      subRegion:'Middle Africa',
+      capital:'Libreville',
+      levelDomain:'.ga',
+      currencies:'Central African CFA franc',
+      languages:' French'
+    }
+
+    // england
+    const england = {
+      name:'England',
+      population:'55,802,278',
+      region:'Europe',
+      subRegion:'Middle Europe',
+      capital:'London',
+      levelDomain:'.ea',
+      currencies:'Euro',
+      languages:' English'
+    }
+    // sudan
+    const sudan = {
+      name:'Sudan',
+      population:'39,598,700',
+      region:'Africa',
+      subRegion:'Northern Africa',
+      capital:'Khartoum',
+      levelDomain:'.sd',
+      currencies:'Sudanese pound',
+      languages:' Arabic, English'
+    }
+    // poland
+    const poland = {
+      name:'Poland',
+      population:'38,437,239',
+      region:'Europe',
+      subRegion:'Eastern Europe',
+      capital:'Warsaw',
+      levelDomain:'.pl',
+      currencies:'Polish złoty',
+      languages:'Polish'
+    }
+    // algeria
+    const algeria = {
+      name:'Algeria',
+      population:'40,400,000',
+      region:'Africa',
+      subRegion:'Northern Africa',
+      capital:'Algiers',
+      levelDomain:'.dz',
+      currencies:'Algerian dinar',
+      languages:'Arabic'
+    }
+    // austria
+    const austria = {
+      name:'Austria',
+      population:'8,725,931',
+      region:'Europe',
+      subRegion:'Western Europe',
+      capital:'Vienna',
+      levelDomain:'.at',
+      currencies:'Euro',
+      languages:'German'
+    }
+     // china
+     const china = {
+      name:'China',
+      population:' 1,377,422,166',
+      region:'Asia',
+      subRegion:'Eastern Asia',
+      capital:'Beijing',
+      levelDomain:'.cn',
+      currencies:'Chinese yuan',
+      languages:'Chinese'
+    }
+    // tunisia
+    const tunisia = {
+      name:'Tunisia',
+      population:'11,154,400',
+      region:'Africa',
+      subRegion:'Northern Africa',
+      capital:'Tunis',
+      levelDomain:'.tn',
+      currencies:'Tunisian dinar',
+      languages:'Arabic'
+    }
+    // india
+    const india = {
+      name:'India',
+      population:'1,295,210,000',
+      region:'Asia',
+      subRegion:'Southern Asia',
+      capital:'New Delhi',
+      levelDomain:'.in',
+      currencies:'Indian rupee',
+      languages:' Hindi, English'
+    }
+    // bolivia
+    const bolivia = {
+      name:'Bolivia',
+      population:'10,985,059',
+      region:'Americas',
+      subRegion:'South America',
+      capital:'Sucre',
+      levelDomain:'.bo',
+      currencies:'Bolivian boliviano',
+      languages:'Spanish, Aymara, Quechua'
+    }
+    // morocco
+    const morocco = {
+      name:'Morocco',
+      population:'33,337,529',
+      region:'Africa',
+      subRegion:'Northern Africa',
+      capital:'Rabat',
+      levelDomain:'.ma',
+      currencies:' Moroccan dirham',
+      languages:'Arabic'
+    }
+    // brazil
+    const brazil = {
+      name:'Brazil',
+      population:'206,135,893',
+      region:'Americans',
+      subRegion:'South America',
+      capital:'Brasília',
+      levelDomain:'.br',
+      currencies:'Brazilian real',
+      languages:'Portuguese'
+    }
+    // united states
+    const unitedStates = {
+      name:'Unites states',
+      population:'331,449,281',
+      region:'Americans',
+      subRegion:'North America',
+      capital:'washington',
+      levelDomain:'.us',
+      currencies:'United States Dollar',
+      languages:'English'
+    }
+    // colombia
+    const colombia = {
+      name:'Colombia',
+      population:'48,759,958',
+      region:'Americans',
+      subRegion:'South America',
+      capital:'Bogotá',
+      levelDomain:'.co',
+      currencies:'Colombian peso',
+      languages:'Spanish'
+    }
+    // portugal
+    const portugal = {
+      name:'Portugal',
+      population:'10,374,822',
+      region:'Europe',
+      subRegion:'Southern Europe',
+      capital:'Lisbon',
+      levelDomain:'.pt',
+      currencies:'Euro',
+      languages:'Portuguese'
+    }
+    // cameroon
+    const cameroon = {
+      name:'Cameroon',
+      population:'22,709,892',
+      region:'Africa',
+      subRegion:'Middle Africa',
+      capital:'Yaoundé',
+      levelDomain:'.cm',
+      currencies:'Central African CFA franc',
+      languages:'English, French'
+    }
+
+    /*const{name:nameEg, population:populationEg, region:regionEg, subRegion:subRegionEg,
+       capital:capitalEg, levelDomain:levelDomainEg, currencies:currenciesEg, languages:languagesEg} = egypt; */
+       var mq = window.matchMedia("(max-width: 950px)");
+    function showImage(image, string, tag1 ='0', tag2 ='0', tag3 ='0', tag4 ='0', tag5 ='0',){
+    $(showclickedImage).appendTo("body");
+    if ($(window).width() < 1000) {
+      $(".in-clicked-image").css({
+      'position':'absolute',
+      'z-index':'20000',
+      'top':'220px',
+      'left': '0px',
+      'display':'block',
+      'height':'150%',
+      'padding':'20px',
+      'background-color':'rgb(204, 201, 201)',
+      'animation':'.5s showClicked ease-in-out',
+      'text-align':'center'
+    }) //css
+
+    $(".in-clicked-image div:first-of-type .close-clicked-image").css({
+      'font-size':'25px',
+       'cursor':'pointer'
+    })
+    $(".in-clicked-image div:first-of-type .close-clicked-image").on("click", function(){
+      $(".in-clicked-image").animate({
+        'opacity':'0'
+      }, 500);
+      setTimeout(() => {
+        $(".in-clicked-image").hide();
+      }, 500);
+    })
+    $(".in-clicked-image div:first-of-type").css({
+      "width": "90%",
+      'margin-left':'5%',
+      'margin-top':'50px'
+    });
+  
+    $(".in-clicked-image div:first-of-type img").attr("src", image);
+    $(".in-clicked-image div:first-of-type img").css({
+      'width':'100%',
+      'margin-top':'0px'
+    });
+    $(".in-clicked-image div:nth-of-type(2)").css({
+      'display':'block',
+      'margin-top':'-50px'
+    })
+    $(".in-clicked-image div:last-of-type article:first-of-type .borders").css({
+      'margin-top': '0px',
+      'display':'block'
+    })
+    $(".in-clicked-image div:last-of-type article").css({
+      'margin-top':'80px',
+      'margin-left':'30px'
+    });
+
+    $(".in-clicked-image div:last-of-type article:last-of-type").css({
+      'margin-top':'-80px',
+      'margin-left':'50px'
+    });
+
+    $(".in-clicked-image div:last-of-type article:first-of-type .borders span").css({
+      'background-color': 'black',
+      'margin-left':'20px',
+      'margin-top':'20px',
+      'padding':'5px',
+      'color':'white',
+      'height':'20px',
+      'cursor':'pointer'
+    }) 
+    $(".in-clicked-image div:last-of-type article:first-of-type .borders").css({
+      'position':'relative',
+      'top':'150px'
+    })
+    } // if
+    else{
+    $(".in-clicked-image").css({
+      'position':'absolute',
+      'z-index':'20000',
+      'background-color':'rgb(204, 201, 201)',
+      'top':'220px',
+      'left': '-50px',
+      'width': '100%',
+      'height':'100%',
+      'display':'flex',
+      'justify-content':'space-around',
+      'animation':'.5s showClicked ease-in-out'
+    }) //css
+  
+    $(".in-clicked-image div:first-of-type .close-clicked-image").css({
+      'font-size':'25px',
+       'cursor':'pointer'
+    })
+    $(".in-clicked-image div:first-of-type .close-clicked-image").on("click", function(){
+      $(".in-clicked-image").animate({
+        'opacity':'0'
+      }, 500);
+      setTimeout(() => {
+        $(".in-clicked-image").hide();
+      }, 500);
+    })
+    $(".in-clicked-image div:first-of-type").css("width", "40%");
+    $(".in-clicked-image div:first-of-type img").attr("src", image);
+    $(".in-clicked-image div:first-of-type img").css({
+      'width':'100%',
+      'margin-top':'50px'
+    });
+    $(".in-clicked-image div:nth-of-type(2)").css({
+      'display':'flex'
+    })
+    $(".in-clicked-image div:last-of-type article:first-of-type .borders").css({
+      'margin-top': '50px',
+      'display':'flex'
+    })
+    $(".in-clicked-image div:last-of-type article").css({
+      'margin-top':'150px',
+      'margin-left':'-100px'
+    });
+
+    $(".in-clicked-image div:last-of-type article:last-of-type").css({
+      'margin-top':'200px',
+      'margin-left':'50px'
+    });
+
+    $(".in-clicked-image div:last-of-type article:first-of-type .borders span").css({
+      'background-color': 'black',
+      'margin-left':'20px',
+      'margin-top':'20px',
+      'padding':'5px',
+      'color':'white',
+      'height':'20px',
+      'cursor':'pointer'
+    }) 
+
+   // $(".in-clicked-image div:last-of-type article:first-of-type .borders span").each(function(){
+    
+   //   $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('v')").hide();
+     // $(this).hide();
+    
+   }
+ 
+    //}) 
+
+   
+  
+ 
+    
+    $(".in-clicked-image div:last-of-type article:first-of-type .country-name").text(string.name);
+    //$(".in-clicked-image div:last-of-type article:first-of-type .country-name").text(countryName);
+    $(".in-clicked-image div:last-of-type article:first-of-type .population").text("population:" + " " + string.population);
+    $(".in-clicked-image div:last-of-type article:first-of-type .region").text("region:" + " " + string.region);
+    $(".in-clicked-image div:last-of-type article:first-of-type .sub-region").text("sub region:" + " " + string.subRegion);
+    $(".in-clicked-image div:last-of-type article:first-of-type .capital").text("capital:" + " " + string.capital);
+    $(".in-clicked-image div:last-of-type article:first-of-type .borders span:first-of-type").text(tag1);
+    $(".in-clicked-image div:last-of-type article:first-of-type .borders span:nth-of-type(2)").text(tag2);
+    $(".in-clicked-image div:last-of-type article:first-of-type .borders span:nth-of-type(3)").text(tag3);
+    $(".in-clicked-image div:last-of-type article:first-of-type .borders span:nth-of-type(4)").text(tag4);
+    $(".in-clicked-image div:last-of-type article:first-of-type .borders span:nth-of-type(5)").text(tag5);
+
+    $(".in-clicked-image div:last-of-type article:last-of-type .top-level-domain").text("level-domain:" + " " + string.levelDomain);
+    $(".in-clicked-image div:last-of-type article:last-of-type .currencies").text("currencies:" + " " + string.currencies);
+    $(".in-clicked-image div:last-of-type article:last-of-type .languages").text("languages:" + " " + string.languages);
+   
+
+ 
+} // function show image
+ // egypt
+$(".egypt").on("click", function(){
+  showImage($(".egypt img").attr("src"), egypt, 'gabon', 'libya', 'sudan', 'algeria', 'morocco' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// germany
+$(".germany").on("click", function(){
+  showImage($(".germany img").attr("src"), germany, 'belgium', 'france', 'poland', 'spain' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// france
+$(".france").on("click", function(){
+  showImage($(".france img").attr("src"), france, 'belgium', 'italy', 'germany', 'england' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// libya
+$(".libya").on("click", function(){
+  showImage($(".libya img").attr("src"), libya, 'egypt', 'tunisia', 'morocco' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// spain
+$(".spain").on("click", function(){
+  showImage($(".spain img").attr("src"), spain, 'france', 'italy' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// italy
+$(".italy").on("click", function(){
+  showImage($(".italy img").attr("src"), italy, 'austria', 'france', 'portugal' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// nigeria
+$(".nigeria").on("click", function(){
+  showImage($(".nigeria img").attr("src"), nigeria, 'sudan', 'cameroon', 'morocco' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// argentina
+$(".argentina").on("click", function(){
+  showImage($(".argentina img").attr("src"), argentina, 'bolivia', 'brazil', 'colombia' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// canada
+$(".canada").on("click", function(){
+  showImage($(".canada img").attr("src"), canada, 'united states', 'mexico' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// japan
+$(".japan").on("click", function(){
+  showImage($(".japan img").attr("src"), japan, 'china', 'india' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// belgium
+$(".belgium").on("click", function(){
+  showImage($(".belgium img").attr("src"), belgium, 'france', 'england' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// gabon
+$(".gabon").on("click", function(){
+  showImage($(".gabon img").attr("src"), gabon, 'cameroon', 'egypt', 'morocco' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// england
+$(".england").on("click", function(){
+  showImage($(".england img").attr("src"), england, 'spain', 'austria', 'portugal' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// sudan
+$(".sudan").on("click", function(){
+  showImage($(".sudan img").attr("src"), sudan, 'egypt', 'gabon', 'libya', 'morocco' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// poland
+$(".poland").on("click", function(){
+  showImage($(".poland img").attr("src"), poland, 'england', 'austria', 'spain' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// algeria
+$(".algeria").on("click", function(){
+  showImage($(".algeria img").attr("src"), algeria, 'gabon', 'egypt', 'sudan' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// austria
+$(".austria").on("click", function(){
+  showImage($(".austria img").attr("src"), austria, 'portugal', 'italy', 'england' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// china
+$(".china").on("click", function(){
+  showImage($(".china img").attr("src"), china, 'japan', 'india' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// tunisia
+$(".tunisia").on("click", function(){
+  showImage($(".tunisia img").attr("src"), tunisia, 'sudan', 'libya', 'morocco' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// india
+$(".india").on("click", function(){
+  showImage($(".india img").attr("src"), india, 'china', 'japan' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// bolivia
+$(".bolivia").on("click", function(){
+  showImage($(".bolivia img").attr("src"), bolivia, 'brazil', 'argentina', 'colombia' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+   window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// morocco
+$(".morocco").on("click", function(){
+  showImage($(".morocco img").attr("src"), morocco, 'egypt', 'sudan', 'libya', 'tunisia' );
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// brazil
+$(".brazil").on("click", function(){
+  showImage($(".brazil img").attr("src"), brazil, 'argentina', 'bolivia', 'colombia');
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// unites states
+$(".united-states").on("click", function(){
+  showImage($(".united-states img").attr("src"), unitedStates, 'canada', 'mexico');
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// colombia
+$(".colombia").on("click", function(){
+  showImage($(".colombia img").attr("src"), colombia, 'argentina', 'brazil', 'bolovia');
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// portugal
+$(".portugal").on("click", function(){
+  showImage($(".portugal img").attr("src"), portugal, 'spain', 'france', 'germany');
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// cameroon
+$(".cameroon").on("click", function(){
+  showImage($(".cameroon img").attr("src"), cameroon, 'egypt', 'sudan', 'libya', 'gabon');
+  $(".in-clicked-image div:last-of-type article:first-of-type .borders span:contains('0')").hide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}) // click
+
+// click on tags
+$(document).on("click", "span", function(){
+  $(".close-clicked-image").click();
+
+  setTimeout(() => {
+
+    $("." + $(this).text()).click();
+  }, 500)
+  
+  
+})
+ //make auto complete countries when the user write in the search field
+ var allCountriesInArray = ['egypt', 'germany', 'france',
+  'libya', 'spain', 'italy', 'nigeria', 'argentina', 'canada',
+  'japan', 'belgium', 'gabon', 'england', 'sudan', 'poland', 
+  'algeria', 'austria', 'china', 'tunisia', 'india', 'bolivia',
+   'morocco', 'brazil', 'united-states', 'colombia', 'portugal', 'cameroon'],
+     autoComplete = '';
+ $(".search").on("keyup", function(){
+  
+  // if(! $(this).next().is('.auto-complete-all-countires')){
+  //   $("<ul class='auto-complete-all-countires'> </ul>").insertAfter($(this));
+  // }
+  autoComplete = '';
+
+for(var i =0;  i < allCountriesInArray.length; i++){
+  autoComplete += '<li>' + allCountriesInArray[i] + '</li>';
+ 
+}
+
+
+$(".auto-complete-all-countries").html(autoComplete);
+// some styling for that li 
+$(".auto-complete-all-countries li").css({
+  'cursor':'pointer',
+  'height':'40px',
+  'margin-top':'10px',
+  'background-color':'rgb(204, 201, 201)',
+  'color':'#000000',
+  'padding':'5px',
+  'width':$(".auto-complete-search").css("width"),
+  'font-size':'22px',
+  'text-align':'left',
+  'padding-left':'10px'
+})
+ // show only the li that contain search val
+ $(".auto-complete-all-countries li").parent().fadeIn();
+$(".auto-complete-all-countries li").hide();
+$(".auto-complete-all-countries li:contains('" +  $(".auto-complete-search").val() + "')").show();
+if($(".search").val() == ''){
+  $(".auto-complete-all-countries li").hide();
+}
+})
+
+$("body").on("click", ".auto-complete-all-countries li", function(){
+  $(".search").val($(this).text());
+  $(this).parent().fadeOut();
+  // to update the changes
+  $(".search").focus();
+})
+
+
+// style of auto complete elements
+$(window).on("resize", function(){
+  $(".auto-complete-all-countries li").css("width", $(".search").css("width"));
+})
+
+//$(".auto-complete-all-countries li").css("width", $(".auto-complete-search").css("width"));
+
+    }) /* for ready */
+  </script>
+  
+
+  <script src="https://kit.fontawesome.com/682febeeb9.js" crossorigin="anonymous"></script>
+</body>
+</html>
